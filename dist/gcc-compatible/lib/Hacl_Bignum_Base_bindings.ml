@@ -2,6 +2,11 @@ open Ctypes
 module Bindings(F:Cstubs.FOREIGN) =
   struct
     open F
+    let hacl_Bignum_Base_mul_wide_add_u32 =
+      foreign "Hacl_Bignum_Base_mul_wide_add_u32"
+        (uint32_t @->
+           (uint32_t @->
+              (uint32_t @-> ((ptr uint32_t) @-> (returning uint32_t)))))
     let hacl_Bignum_Base_mul_wide_add_u64 =
       foreign "Hacl_Bignum_Base_mul_wide_add_u64"
         (uint64_t @->
