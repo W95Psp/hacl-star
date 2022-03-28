@@ -292,34 +292,61 @@ Write `a * b` in `res`.
 void Hacl_Bignum256_32_mul(uint32_t *a, uint32_t *b, uint32_t *res)
 {
   memset(res, 0U, (uint32_t)16U * sizeof (uint32_t));
-  for (uint32_t i0 = (uint32_t)0U; i0 < (uint32_t)8U; i0++)
+  uint32_t b0 = b[0U];
+  uint32_t *uu____0 = res;
+  uint32_t c = (uint32_t)0U;
+  for (uint32_t i = (uint32_t)0U; i < (uint32_t)2U; i++)
+  {
+    uint32_t a_i = a[(uint32_t)4U * i];
+    uint32_t *res_i0 = uu____0 + (uint32_t)4U * i;
+    c = Hacl_Bignum_Base_mul_wide_add_u32(a_i, b0, c, res_i0);
+    uint32_t a_i0 = a[(uint32_t)4U * i + (uint32_t)1U];
+    uint32_t *res_i1 = uu____0 + (uint32_t)4U * i + (uint32_t)1U;
+    c = Hacl_Bignum_Base_mul_wide_add_u32(a_i0, b0, c, res_i1);
+    uint32_t a_i1 = a[(uint32_t)4U * i + (uint32_t)2U];
+    uint32_t *res_i2 = uu____0 + (uint32_t)4U * i + (uint32_t)2U;
+    c = Hacl_Bignum_Base_mul_wide_add_u32(a_i1, b0, c, res_i2);
+    uint32_t a_i2 = a[(uint32_t)4U * i + (uint32_t)3U];
+    uint32_t *res_i = uu____0 + (uint32_t)4U * i + (uint32_t)3U;
+    c = Hacl_Bignum_Base_mul_wide_add_u32(a_i2, b0, c, res_i);
+  }
+  for (uint32_t i = (uint32_t)8U; i < (uint32_t)8U; i++)
+  {
+    uint32_t a_i = a[i];
+    uint32_t *res_i = uu____0 + i;
+    c = Hacl_Bignum_Base_mul_wide_add_u32(a_i, b0, c, res_i);
+  }
+  uint32_t r = c;
+  uint32_t c0 = r;
+  res[8U] = c0;
+  for (uint32_t i0 = (uint32_t)1U; i0 < (uint32_t)8U; i0++)
   {
     uint32_t bj = b[i0];
     uint32_t *res_j = res + i0;
-    uint32_t c = (uint32_t)0U;
+    uint32_t c1 = (uint32_t)0U;
     for (uint32_t i = (uint32_t)0U; i < (uint32_t)2U; i++)
     {
       uint32_t a_i = a[(uint32_t)4U * i];
       uint32_t *res_i0 = res_j + (uint32_t)4U * i;
-      c = Hacl_Bignum_Base_mul_wide_add2_u32(a_i, bj, c, res_i0);
+      c1 = Hacl_Bignum_Base_mul_wide_add2_u32(a_i, bj, c1, res_i0);
       uint32_t a_i0 = a[(uint32_t)4U * i + (uint32_t)1U];
       uint32_t *res_i1 = res_j + (uint32_t)4U * i + (uint32_t)1U;
-      c = Hacl_Bignum_Base_mul_wide_add2_u32(a_i0, bj, c, res_i1);
+      c1 = Hacl_Bignum_Base_mul_wide_add2_u32(a_i0, bj, c1, res_i1);
       uint32_t a_i1 = a[(uint32_t)4U * i + (uint32_t)2U];
       uint32_t *res_i2 = res_j + (uint32_t)4U * i + (uint32_t)2U;
-      c = Hacl_Bignum_Base_mul_wide_add2_u32(a_i1, bj, c, res_i2);
+      c1 = Hacl_Bignum_Base_mul_wide_add2_u32(a_i1, bj, c1, res_i2);
       uint32_t a_i2 = a[(uint32_t)4U * i + (uint32_t)3U];
       uint32_t *res_i = res_j + (uint32_t)4U * i + (uint32_t)3U;
-      c = Hacl_Bignum_Base_mul_wide_add2_u32(a_i2, bj, c, res_i);
+      c1 = Hacl_Bignum_Base_mul_wide_add2_u32(a_i2, bj, c1, res_i);
     }
     for (uint32_t i = (uint32_t)8U; i < (uint32_t)8U; i++)
     {
       uint32_t a_i = a[i];
       uint32_t *res_i = res_j + i;
-      c = Hacl_Bignum_Base_mul_wide_add2_u32(a_i, bj, c, res_i);
+      c1 = Hacl_Bignum_Base_mul_wide_add2_u32(a_i, bj, c1, res_i);
     }
-    uint32_t r = c;
-    res[(uint32_t)8U + i0] = r;
+    uint32_t r0 = c1;
+    res[(uint32_t)8U + i0] = r0;
   }
 }
 
@@ -515,34 +542,61 @@ amont_mul(uint32_t *n, uint32_t nInv_u64, uint32_t *aM, uint32_t *bM, uint32_t *
 {
   uint32_t c[16U] = { 0U };
   memset(c, 0U, (uint32_t)16U * sizeof (uint32_t));
-  for (uint32_t i0 = (uint32_t)0U; i0 < (uint32_t)8U; i0++)
+  uint32_t b0 = bM[0U];
+  uint32_t *uu____0 = c;
+  uint32_t c1 = (uint32_t)0U;
+  for (uint32_t i = (uint32_t)0U; i < (uint32_t)2U; i++)
+  {
+    uint32_t a_i = aM[(uint32_t)4U * i];
+    uint32_t *res_i0 = uu____0 + (uint32_t)4U * i;
+    c1 = Hacl_Bignum_Base_mul_wide_add_u32(a_i, b0, c1, res_i0);
+    uint32_t a_i0 = aM[(uint32_t)4U * i + (uint32_t)1U];
+    uint32_t *res_i1 = uu____0 + (uint32_t)4U * i + (uint32_t)1U;
+    c1 = Hacl_Bignum_Base_mul_wide_add_u32(a_i0, b0, c1, res_i1);
+    uint32_t a_i1 = aM[(uint32_t)4U * i + (uint32_t)2U];
+    uint32_t *res_i2 = uu____0 + (uint32_t)4U * i + (uint32_t)2U;
+    c1 = Hacl_Bignum_Base_mul_wide_add_u32(a_i1, b0, c1, res_i2);
+    uint32_t a_i2 = aM[(uint32_t)4U * i + (uint32_t)3U];
+    uint32_t *res_i = uu____0 + (uint32_t)4U * i + (uint32_t)3U;
+    c1 = Hacl_Bignum_Base_mul_wide_add_u32(a_i2, b0, c1, res_i);
+  }
+  for (uint32_t i = (uint32_t)8U; i < (uint32_t)8U; i++)
+  {
+    uint32_t a_i = aM[i];
+    uint32_t *res_i = uu____0 + i;
+    c1 = Hacl_Bignum_Base_mul_wide_add_u32(a_i, b0, c1, res_i);
+  }
+  uint32_t r = c1;
+  uint32_t c10 = r;
+  c[8U] = c10;
+  for (uint32_t i0 = (uint32_t)1U; i0 < (uint32_t)8U; i0++)
   {
     uint32_t bj = bM[i0];
     uint32_t *res_j = c + i0;
-    uint32_t c1 = (uint32_t)0U;
+    uint32_t c2 = (uint32_t)0U;
     for (uint32_t i = (uint32_t)0U; i < (uint32_t)2U; i++)
     {
       uint32_t a_i = aM[(uint32_t)4U * i];
       uint32_t *res_i0 = res_j + (uint32_t)4U * i;
-      c1 = Hacl_Bignum_Base_mul_wide_add2_u32(a_i, bj, c1, res_i0);
+      c2 = Hacl_Bignum_Base_mul_wide_add2_u32(a_i, bj, c2, res_i0);
       uint32_t a_i0 = aM[(uint32_t)4U * i + (uint32_t)1U];
       uint32_t *res_i1 = res_j + (uint32_t)4U * i + (uint32_t)1U;
-      c1 = Hacl_Bignum_Base_mul_wide_add2_u32(a_i0, bj, c1, res_i1);
+      c2 = Hacl_Bignum_Base_mul_wide_add2_u32(a_i0, bj, c2, res_i1);
       uint32_t a_i1 = aM[(uint32_t)4U * i + (uint32_t)2U];
       uint32_t *res_i2 = res_j + (uint32_t)4U * i + (uint32_t)2U;
-      c1 = Hacl_Bignum_Base_mul_wide_add2_u32(a_i1, bj, c1, res_i2);
+      c2 = Hacl_Bignum_Base_mul_wide_add2_u32(a_i1, bj, c2, res_i2);
       uint32_t a_i2 = aM[(uint32_t)4U * i + (uint32_t)3U];
       uint32_t *res_i = res_j + (uint32_t)4U * i + (uint32_t)3U;
-      c1 = Hacl_Bignum_Base_mul_wide_add2_u32(a_i2, bj, c1, res_i);
+      c2 = Hacl_Bignum_Base_mul_wide_add2_u32(a_i2, bj, c2, res_i);
     }
     for (uint32_t i = (uint32_t)8U; i < (uint32_t)8U; i++)
     {
       uint32_t a_i = aM[i];
       uint32_t *res_i = res_j + i;
-      c1 = Hacl_Bignum_Base_mul_wide_add2_u32(a_i, bj, c1, res_i);
+      c2 = Hacl_Bignum_Base_mul_wide_add2_u32(a_i, bj, c2, res_i);
     }
-    uint32_t r = c1;
-    c[(uint32_t)8U + i0] = r;
+    uint32_t r0 = c2;
+    c[(uint32_t)8U + i0] = r0;
   }
   areduction(n, nInv_u64, c, resM);
 }

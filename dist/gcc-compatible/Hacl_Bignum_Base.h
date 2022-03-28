@@ -38,6 +38,14 @@ extern "C" {
 #include "Hacl_Kremlib.h"
 #include "evercrypt_targetconfig.h"
 #include "libintvector.h"
+static inline uint32_t
+Hacl_Bignum_Base_mul_wide_add_u32(uint32_t a, uint32_t b, uint32_t c_in, uint32_t *out)
+{
+  uint64_t res = (uint64_t)a * (uint64_t)b + (uint64_t)c_in;
+  out[0U] = (uint32_t)res;
+  return (uint32_t)(res >> (uint32_t)32U);
+}
+
 static inline uint64_t
 Hacl_Bignum_Base_mul_wide_add_u64(uint64_t a, uint64_t b, uint64_t c_in, uint64_t *out)
 {
