@@ -70,7 +70,7 @@ module AEAD = struct
     let encrypt ~st:(alg, st) ~iv ~ad ~pt ~ct ~tag : unit result =
       (* providers/EverCrypt.AEAD.encrypt_pre *)
       check_sizes ~alg ~iv_len:(C.size iv) ~tag_len:(C.size tag)
-        ~ad_len:(C.size ad)~pt_len:(C.size pt) ~ct_len:(C.size ct);
+        ~pt_len:(C.size pt) ~ct_len:(C.size ct);
       assert (C.disjoint ct tag);
       assert (C.disjoint iv ct);
       assert (C.disjoint iv tag);
@@ -84,7 +84,7 @@ module AEAD = struct
     let decrypt ~st:(alg, st) ~iv ~ad ~ct ~tag ~pt : unit result =
       (* EverCrypt.AEAD.decrypt_st *)
       check_sizes ~alg ~iv_len:(C.size iv) ~tag_len:(C.size tag)
-        ~ad_len:(C.size ad)~pt_len:(C.size pt) ~ct_len:(C.size ct);
+        ~pt_len:(C.size pt) ~ct_len:(C.size ct);
       assert (C.disjoint tag pt);
       assert (C.disjoint tag ct);
       assert (C.disjoint tag ad);
@@ -138,31 +138,26 @@ module Hash = struct
   open EverCrypt_Hash
   module Noalloc = struct
     let hash ~alg ~msg ~digest =
-      check_max_input_len alg (C.size msg);
       assert (C.size digest = digest_len alg);
       assert (C.disjoint digest msg);
       everCrypt_Hash_hash (alg_definition alg) (C.ctypes_buf digest) (C.ctypes_buf msg) (C.size_uint32 msg)
-    let finish ~st:(alg, _, t) ~digest =
+    let finish ~st:(alg, t) ~digest =
       assert (C.size digest = digest_len alg);
       everCrypt_Hash_Incremental_finish t (C.ctypes_buf digest)
   end
-  type t = alg * Z.t ref * hacl_Streaming_Functor_state_s___EverCrypt_Hash_state_s____ ptr
+  type t = alg * hacl_Streaming_Functor_state_s___EverCrypt_Hash_state_s____ ptr
   let init ~alg =
     Lazy.force at_exit_full_major;
     let alg_spec = alg_definition alg in
     let st = everCrypt_Hash_Incremental_create_in alg_spec in
     everCrypt_Hash_Incremental_init st;
-    let incr_len = ref Z.zero in
     Gc.finalise everCrypt_Hash_Incremental_free st;
-    (alg, incr_len, st)
-  let update ~st:(alg, incr_len, t) ~msg =
-    check_max_input_len alg (C.size msg);
-    incr_len := Z.add !incr_len (Z.of_int (C.size msg));
-    assert (Z.lt !incr_len (max_input_len alg));
+    (alg, st)
+  let update ~st:(_alg, t) ~msg =
     everCrypt_Hash_Incremental_update t (C.ctypes_buf msg) (C.size_uint32 msg)
-  let finish ~st:(alg, incr_len, t) =
+  let finish ~st:(alg, t) =
     let digest = C.make (digest_len alg) in
-    Noalloc.finish ~st:(alg, incr_len, t) ~digest;
+    Noalloc.finish ~st:(alg, t) ~digest;
     digest
   let hash ~alg ~msg =
     let digest = C.make (digest_len alg) in
@@ -191,8 +186,6 @@ module HMAC = struct
       (* Hacl.HMAC.compute_st *)
       assert (C.size tag = HashDefs.digest_len alg);
       assert (C.disjoint msg tag);
-      HashDefs.check_key_len alg (C.size key);
-      HashDefs.check_key_len alg (C.size msg);
       everCrypt_HMAC_compute (HashDefs.alg_definition alg) (C.ctypes_buf tag) (C.ctypes_buf key) (C.size_uint32 key) (C.ctypes_buf msg) (C.size_uint32 msg)
   end
   let mac ~alg ~key ~msg =
@@ -233,16 +226,12 @@ module HKDF = struct
       assert (C.size prk = HashDefs.digest_len alg);
       assert (C.disjoint salt prk);
       assert (C.disjoint ikm prk);
-      HashDefs.check_key_len alg (C.size salt);
-      HashDefs.check_key_len alg (C.size ikm);
       everCrypt_HKDF_extract (HashDefs.alg_definition alg) (C.ctypes_buf prk) (C.ctypes_buf salt) (C.size_uint32 salt) (C.ctypes_buf ikm) (C.size_uint32 ikm)
     let expand ~alg ~prk ~info ~okm =
       (* Hacl.HKDF.expand_st *)
       assert (C.size okm <= 255 * HashDefs.digest_len alg);
       assert (C.disjoint okm prk);
       assert (HashDefs.digest_len alg <= C.size prk);
-      HashDefs.(check_max_input_len alg (digest_len alg + block_len alg + C.size info + 1));
-      HashDefs.check_key_len alg (C.size prk);
       everCrypt_HKDF_expand (HashDefs.alg_definition alg) (C.ctypes_buf okm) (C.ctypes_buf prk) (C.size_uint32 prk) (C.ctypes_buf info) (C.size_uint32 info) (C.size_uint32 okm)
   end
   let extract ~alg ~salt ~ikm =
