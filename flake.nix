@@ -4,7 +4,7 @@
     fstar-src.flake   = false;
     karamel-src.url   = github:fstarlang/karamel?ref=master;
     karamel-src.flake = false;
-    
+
     everest = {
       url = github:project-everest/everest-nix?dir=projects;
       inputs.fstar-src.follows    = "fstar-src";
