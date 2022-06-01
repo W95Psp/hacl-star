@@ -1144,6 +1144,7 @@ dist/test/c/Hacl_Test_K256.c: KRML_EXTRA=-drop Lib.IntTypes.Intrinsics -add-incl
 copy-krmllib:
 	mkdir -p dist/karamel
 	(cd $(KRML_HOME) && tar cvf - krmllib/dist/minimal include) | (cd dist/karamel && tar xf -)
+	chmod u+w,g+w -R dist/karamel
 
 compile-%: dist/Makefile.tmpl dist/configure dist/%/Makefile.basic | copy-krmllib
 	cp $< dist/$*/Makefile
