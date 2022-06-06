@@ -21,7 +21,7 @@ let extra_bytes_helper (n:nat) : Lemma
   =
   ()
 
-#reset-options "--smtencoding.elim_box true --z3rlimit 25 --max_ifuel 1 --initial_fuel 0 --max_fuel 1"
+#reset-options "--smtencoding.elim_box true --z3rlimit 50 --max_ifuel 1 --initial_fuel 0 --max_fuel 1"
 let bytes_to_quad_size_no_extra_bytes num_bytes = ()
 
 let no_extra_bytes_helper s num_bytes =
