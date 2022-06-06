@@ -291,6 +291,7 @@ val mont_reduction_lemma_step_mod_pbits: pbits:pos -> n:pos -> mu:nat -> c_i:nat
   (requires (1 + n * mu) % pow2 pbits == 0)
   (ensures  (c_i + n * (mu * c_i % pow2 pbits)) % pow2 pbits == 0)
 
+#push-options "--z3rlimit 100"
 let mont_reduction_lemma_step_mod_pbits pbits n mu c_i =
   let r = pow2 pbits in
   let q_i = mu * c_i % r in
@@ -313,7 +314,7 @@ let mont_reduction_lemma_step_mod_pbits pbits n mu c_i =
     (==) { assert ((1 + n * mu) % r = 0) }
     0;
   }
-
+#pop-options
 
 val mont_reduction_lemma_step_modr_aux: pbits:pos -> n:pos -> q_i:nat -> i:pos -> res0:nat ->
   Lemma (let b1 = pow2 (pbits * (i - 1)) in
