@@ -604,7 +604,7 @@ val some_arithmetic: t:inttype{~(U1? t)} -> n:nat -> i:nat -> Lemma
    n / pow2 (8 * i) % pow2 8)
 
 #restart-solver
-#push-options "--z3rlimit 350 --fuel 0 --ifuel 0"
+#push-options "--z3rlimit 450 --fuel 0 --ifuel 0"
 let some_arithmetic t n i =
   let m = numbytes t in
   calc (==) {
